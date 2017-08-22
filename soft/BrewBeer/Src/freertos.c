@@ -37,7 +37,7 @@
 #include "cmsis_os.h"
 
 /* USER CODE BEGIN Includes */     
-
+#include "include.h"
 /* USER CODE END Includes */
 
 /* Variables -----------------------------------------------------------------*/
@@ -146,6 +146,7 @@ void SystemTask(void const * argument)
 {
 
   /* USER CODE BEGIN SystemTask */
+  	save_task_info();
   /* Infinite loop */
   for(;;)
   {
@@ -158,6 +159,7 @@ void SystemTask(void const * argument)
 void SerialServerTask(void const * argument)
 {
   /* USER CODE BEGIN SerialServerTask */
+  	save_task_info();
   /* Infinite loop */
   for(;;)
   {
@@ -170,10 +172,12 @@ void SerialServerTask(void const * argument)
 void ReadKeyTask(void const * argument)
 {
   /* USER CODE BEGIN ReadKeyTask */
+  	save_task_info();
   /* Infinite loop */
   for(;;)
   {
-    osDelay(1);
+	read_key();
+	osDelay(35);
   }
   /* USER CODE END ReadKeyTask */
 }
@@ -182,10 +186,13 @@ void ReadKeyTask(void const * argument)
 void DealKeyTask(void const * argument)
 {
   /* USER CODE BEGIN DealKeyTask */
+  	save_task_info();
+	unsigned char recv_key_value;	
   /* Infinite loop */
   for(;;)
   {
-    osDelay(1);
+	xQueueReceive(KeyQueueHandle, &recv_key_value, portMAX_DELAY);
+	deal_key_value(recv_key_value);
   }
   /* USER CODE END DealKeyTask */
 }
@@ -194,6 +201,7 @@ void DealKeyTask(void const * argument)
 void WatcherTask(void const * argument)
 {
   /* USER CODE BEGIN WatcherTask */
+  	save_task_info();
   /* Infinite loop */
   for(;;)
   {

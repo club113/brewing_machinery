@@ -41,6 +41,28 @@
 
 /* Private define ------------------------------------------------------------*/
 
+#define WIFI_RESET_Pin GPIO_PIN_0
+#define WIFI_RESET_GPIO_Port GPIOA
+#define WIFI_RELOAD_Pin GPIO_PIN_1
+#define WIFI_RELOAD_GPIO_Port GPIOA
+#define PH_POWER_Pin GPIO_PIN_5
+#define PH_POWER_GPIO_Port GPIOC
+#define RS485_2_TX_EN_Pin GPIO_PIN_1
+#define RS485_2_TX_EN_GPIO_Port GPIOB
+#define RS485_1_TX_EN_Pin GPIO_PIN_11
+#define RS485_1_TX_EN_GPIO_Port GPIOA
+#define FAULT_LED_Pin GPIO_PIN_12
+#define FAULT_LED_GPIO_Port GPIOA
+#define RUN_IED_Pin GPIO_PIN_10
+#define RUN_IED_GPIO_Port GPIOC
+#define RS485_2_LED_Pin GPIO_PIN_11
+#define RS485_2_LED_GPIO_Port GPIOC
+#define RS485_1_LED_Pin GPIO_PIN_12
+#define RS485_1_LED_GPIO_Port GPIOC
+#define KEY_2_Pin GPIO_PIN_5
+#define KEY_2_GPIO_Port GPIOB
+#define KEY_1_Pin GPIO_PIN_6
+#define KEY_1_GPIO_Port GPIOB
 /* USER CODE BEGIN Private defines */
 
 /* USER CODE END Private defines */
