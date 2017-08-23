@@ -97,7 +97,6 @@ unsigned char loopx = 0;
 
 void deal_key_value(unsigned key_value)
 {
-	static unsigned char step = 0;
 	switch(key_value)
   		{
   			case(KEY_1_TRIGGER):

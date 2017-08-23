@@ -15,6 +15,9 @@
 #include "FreeRTOS.h"
 #include "task.h"
 
+#include "machine_info.h"
+#include "serial.h"
+#include "wifi.h"
 
 #include "led.h"
 #include "crc.h"

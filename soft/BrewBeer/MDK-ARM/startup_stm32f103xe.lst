@@ -579,18 +579,17 @@ ARM Macro Assembler    Page 9
               00000000 
 Command Line: --debug --xref --diag_suppress=9931 --cpu=Cortex-M3 --apcs=interw
 ork --depend=brewbeer\startup_stm32f103xe.d -obrewbeer\startup_stm32f103xe.o -I
-..\Inc -IE:\work\job_outof_work\BrewBeer\MDK-ARM\RTE -I"C:\Program Files (x86)\
-keil5_17\ARM\PACK\ARM\CMSIS\4.5.0\CMSIS\Include" -I"C:\Program Files (x86)\keil
-5_17\ARM\PACK\Keil\STM32F1xx_DFP\1.1.0\Device\Include" --predefine="__MICROLIB 
-SETA 1" --predefine="__UVISION_VERSION SETA 517" --predefine="_RTE_ SETA 1" --p
+..\Inc -IG:\work_out_job\WorkSpace\BrewBeer\MDK-ARM\RTE -Id:\Keil_v5\ARM\PACK\A
+RM\CMSIS\4.5.0\CMSIS\Include -Id:\Keil_v5\ARM\PACK\Keil\STM32F1xx_DFP\1.1.0\Dev
+ice\Include --predefine="__MICROLIB SETA 1" --predefine="__UVISION_VERSION SETA
+ 517" --predefine="_RTE_ SETA 1" --predefine="STM32F10X_HD SETA 1" --list=start
 
 
 
 ARM Macro Assembler    Page 10 
 
 
-redefine="STM32F10X_HD SETA 1" --list=startup_stm32f103xe.lst startup_stm32f103
-xe.s
+up_stm32f103xe.lst startup_stm32f103xe.s
 
 
 

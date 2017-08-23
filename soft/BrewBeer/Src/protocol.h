@@ -3,11 +3,7 @@
 #include "include.h"
 
 
-#define WIFICOM		huart1
-#define RS485COM1	huart2
-#define RS485COM2	huart3
 
-#define RS485NETCOM	RS485COM1
 #define ARGMAXLENGTH	20
 
 typedef struct
