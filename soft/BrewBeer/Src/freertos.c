@@ -159,11 +159,28 @@ void SystemTask(void const * argument)
 void SerialServerTask(void const * argument)
 {
   /* USER CODE BEGIN SerialServerTask */
+  	unsigned int RecvMsg = 0;
   	save_task_info();
   /* Infinite loop */
   for(;;)
   {
-    osDelay(1);
+	xQueueReceive(SerialQueueHandle, &RecvMsg, portMAX_DELAY);
+	switch(RecvMsg)
+		{
+			case WIFIMSG:
+				DealWifiRecvData();
+				break;
+			case RS485_1MSG:
+				DealRs485_1RecvData();
+				break;
+
+			case RS485_2MSG:
+				DealRs485_2RecvData();
+				break;
+
+			default:
+				break;
+		}
   }
   /* USER CODE END SerialServerTask */
 }

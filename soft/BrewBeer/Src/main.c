@@ -41,7 +41,7 @@
 #include "gpio.h"
 
 /* USER CODE BEGIN Includes */
-
+#include "include.h"
 /* USER CODE END Includes */
 
 /* Private variables ---------------------------------------------------------*/
@@ -184,7 +184,65 @@ void SystemClock_Config(void)
 void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 {
 /* USER CODE BEGIN Callback 0 */
+	BaseType_t xHigherPriorityTaskWoken;
+	xHigherPriorityTaskWoken = pdFALSE;	
+	unsigned int SerialQueueData = 0;
 
+	if (htim == &SOFTTIMER) {
+		INC_COUNTER_TIMER();
+  	}
+	
+	if (htim == &WIFITIMER) {
+  	HAL_TIM_Base_Stop_IT(&WIFITIMER);
+	if(WifiRecvData.DmaCNDTR==  WIFICOM.hdmarx->Instance->CNDTR)
+		{			
+			HAL_UART_DMAStop(&WIFICOM);   
+			WifiRecvData.recv_data_length= SERIAL_RXBUFF_SIZE -WifiRecvData.DmaCNDTR;
+			HAL_UART_Receive_DMA(&WIFICOM, WifiRecvData.Rx_data, SERIAL_RXBUFF_SIZE);  
+			SerialQueueData = WIFIMSG;
+			xQueueSendFromISR(SerialQueueHandle,&SerialQueueData,&xHigherPriorityTaskWoken);
+		}
+	else
+		{
+			HAL_TIM_Base_Start_IT(&WIFITIMER);
+			WifiRecvData.DmaCNDTR=  WIFICOM.hdmarx->Instance->CNDTR;
+		}
+ 	}
+
+	if (htim == &RS485TIMER1) {
+  	HAL_TIM_Base_Stop_IT(&RS485TIMER1);
+	if(Rs485_1RecvData.DmaCNDTR==  RS485COM1.hdmarx->Instance->CNDTR)
+		{			
+			HAL_UART_DMAStop(&RS485COM1);   
+			Rs485_1RecvData.recv_data_length= SERIAL_RXBUFF_SIZE -Rs485_1RecvData.DmaCNDTR;
+			HAL_UART_Receive_DMA(&RS485COM1, Rs485_1RecvData.Rx_data, SERIAL_RXBUFF_SIZE);  
+			SerialQueueData = RS485_1MSG;
+			xQueueSendFromISR(SerialQueueHandle,&SerialQueueData,&xHigherPriorityTaskWoken);
+		}
+	else
+		{
+			HAL_TIM_Base_Start_IT(&RS485TIMER1);
+			Rs485_1RecvData.DmaCNDTR=  RS485COM1.hdmarx->Instance->CNDTR;
+		}
+  	}
+
+	if (htim == &RS485TIMER2) {
+  	HAL_TIM_Base_Stop_IT(&RS485TIMER2);
+	if(Rs485_2RecvData.DmaCNDTR==  RS485COM2.hdmarx->Instance->CNDTR)
+		{			
+			HAL_UART_DMAStop(&RS485COM2);   
+			Rs485_2RecvData.recv_data_length= SERIAL_RXBUFF_SIZE -Rs485_2RecvData.DmaCNDTR;
+			HAL_UART_Receive_DMA(&RS485COM2, Rs485_2RecvData.Rx_data, SERIAL_RXBUFF_SIZE);  
+			SerialQueueData = RS485_2MSG;
+			xQueueSendFromISR(SerialQueueHandle,&SerialQueueData,&xHigherPriorityTaskWoken);
+		}
+	else
+		{
+			HAL_TIM_Base_Start_IT(&RS485TIMER2);
+			Rs485_2RecvData.DmaCNDTR=  RS485COM2.hdmarx->Instance->CNDTR;
+		}
+  	}
+	
 /* USER CODE END Callback 0 */
   if (htim->Instance == TIM7) {
     HAL_IncTick();

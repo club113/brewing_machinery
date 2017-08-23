@@ -24,6 +24,12 @@
 #include "cpu.h"
 #include "key.h"
 #include "protocol.h"
+#include "timer_operat.h"
+
+
+extern osMessageQId SerialQueueHandle;
+extern osMessageQId KeyQueueHandle;
+extern osMessageQId SysQueueHandle;
 
 #endif
 
