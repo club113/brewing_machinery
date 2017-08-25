@@ -41,9 +41,29 @@ void UsartReceive_IDLE(UART_HandleTypeDef *huart)
 }
 
 
+
+void WifiComStartRecv(void)
+{
+	HAL_UART_Receive_DMA(&WIFICOM, WifiRecvData.Rx_data, SERIAL_RXBUFF_SIZE);  
+	__HAL_UART_ENABLE_IT(&WIFICOM, UART_IT_IDLE);
+}
+
+void Rs485_1ComStartRecv(void)
+{
+	HAL_UART_Receive_DMA(&RS485COM1, Rs485_1RecvData.Rx_data, SERIAL_RXBUFF_SIZE);  
+	__HAL_UART_ENABLE_IT(&RS485COM1, UART_IT_IDLE);
+}
+
+void Rs485_2ComStartRecv(void)
+{
+	HAL_UART_Receive_DMA(&RS485COM2, Rs485_2RecvData.Rx_data, SERIAL_RXBUFF_SIZE);  
+	__HAL_UART_ENABLE_IT(&RS485COM2, UART_IT_IDLE);
+}
+
+
 void DealWifiRecvData(void)
 {
-
+	DealWifiData();
 }
 
 void DealRs485_1RecvData(void)

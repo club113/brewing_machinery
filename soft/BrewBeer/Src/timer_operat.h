@@ -40,6 +40,8 @@ unsigned char timer_free(unsigned char space);
 void register_queue_into_timer(unsigned char space,osMessageQId queue);
 void register_callback_function_into_timer(unsigned char space,P_TimerCounter_Deal_Function function);
 
+
+void InitSoftTimer(void);
 void INC_COUNTER_TIMER(void);
 
 

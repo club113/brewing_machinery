@@ -96,7 +96,7 @@ int main(void)
   MX_USART3_UART_Init();
 
   /* USER CODE BEGIN 2 */
-
+	InitSoftTimer();
   /* USER CODE END 2 */
 
   /* Call init function for freertos objects (in freertos.c) */

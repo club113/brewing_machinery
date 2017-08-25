@@ -141,3 +141,9 @@ void clear_timer_counter_overflow_flag(unsigned char space)
 	timer_counter.timer[space].overflow_flag = 0;
 }
 
+void InitSoftTimer(void)
+{
+	HAL_TIM_Base_Start(&SOFTTIMER);
+}
+
+

@@ -1,6 +1,27 @@
 
 #include "protocol.h"
 
+unsigned char get_device_id(char* parameter)
+{
+	return 0;
+}
+
+unsigned char get_temp(char* parameter)
+{
+	return 0;
+}
+
+
+unsigned char get_device_info(char* parameter)
+{
+	return 0;
+}
+
+unsigned char set_device_date(char* parameter)
+{
+	return 0;
+}
+
 HAL_StatusTypeDef WifiSendData(unsigned char* pTxData, unsigned short Size)
 {
 	return HAL_UART_Transmit(&WIFICOM,pTxData,Size,200);
@@ -65,4 +86,64 @@ unsigned char WifiDeCode(unsigned char* data,unsigned short recv_data_length,P_S
 
 
 
+S_Cmd cmd_list[] = 
+{
+{CALLID,get_device_id,"get device id"},
+{GETTEMP,get_temp,"get device temp"},
+{SETDATE,set_device_date,"set device  date"},
+{GETINFO,get_device_info,"get device info"}
+};
+
+
+P_S_Cmd find_function(unsigned char function_code)
+{
+	unsigned char loopx = 0;
+	unsigned char cmd_num = sizeof(cmd_list)/sizeof(cmd_list[0]);
+	for(;loopx<cmd_num;loopx++)
+		{
+			if(function_code == cmd_list[loopx].function_code)
+				{
+					return &(cmd_list[loopx]);
+				}
+		}
+	return (P_S_Cmd) 0;
+}
+
+void SendSuccessCode(unsigned char function)
+{
+	return;
+}
+
+void SendFailedCode(unsigned char function)
+{
+	return;
+}
+
+void ExecuteData(P_S_WifiFrame wifi_frame)
+{
+	P_S_Cmd ExecuteCode = NULL;
+	unsigned char res = 0;
+	ExecuteCode = find_function(wifi_frame->function);
+	if(ExecuteCode)
+		{
+			res = ExecuteCode->function((char*)wifi_frame);
+		}
+	if(res)
+		{
+			SendSuccessCode(wifi_frame->function);
+		}
+	else
+		{
+			SendFailedCode(wifi_frame->function);
+		}
+}
+
+void DealWifiData(void)
+{
+	S_WifiFrame WifiFrame = {0};
+	if(1 == WifiDeCode(WifiRecvData.Rx_data,WifiRecvData.recv_data_length,&WifiFrame))
+		{
+			ExecuteData(&WifiFrame);
+		}
+}
 
