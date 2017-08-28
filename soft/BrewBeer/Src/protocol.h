@@ -20,8 +20,8 @@ typedef struct
 
 typedef struct
 {
-	unsigned char version:7;
 	unsigned char encrypt:1;
+	unsigned char version:7;
 }S_FormatControl,*P_S_FormatControl;
 
 typedef union
@@ -39,6 +39,8 @@ typedef struct
 	unsigned char arg[ARGMAXLENGTH];
 }S_WifiFrame,*P_S_WifiFrame;
 
+
+HAL_StatusTypeDef UploadDataByWifi(P_S_WifiFrame wifi_frame);
 
 
 void DealWifiData(void);

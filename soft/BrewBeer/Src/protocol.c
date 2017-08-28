@@ -82,6 +82,32 @@ unsigned char WifiDeCode(unsigned char* data,unsigned short recv_data_length,P_S
 	return 1;
 }
 
+void SetDeviceIDToWifFrame(P_S_WifiFrame wifi_frame)
+{
+	memcpy(wifi_frame->DeviceID,MachineInfo.DeviceID,8);
+}
+
+HAL_StatusTypeDef UploadDataByWifi(P_S_WifiFrame wifi_frame)
+{
+	SetDeviceIDToWifFrame(wifi_frame);
+	unsigned short CheckLoop = 0;
+	WifiOperatData.Tx_data[0] = 0X55;
+	WifiOperatData.Tx_data[1] = 0XAA;
+	WifiOperatData.Tx_data[2] = (wifi_frame->data_length >> 8)&0XFF;
+	WifiOperatData.Tx_data[3] = (wifi_frame->data_length)&0XFF;
+	WifiOperatData.Tx_data[4] = wifi_frame->format_control.fc_value;
+
+	memcpy(&(WifiOperatData.Tx_data[5]),wifi_frame->DeviceID,8);
+
+	WifiOperatData.Tx_data[13] = wifi_frame->function;
+	memcpy(&(WifiOperatData.Tx_data[14]),wifi_frame->arg,(wifi_frame->data_length - 15));
+	for(;CheckLoop < (wifi_frame->data_length - 1); CheckLoop ++)
+		{
+			WifiOperatData.Tx_data[wifi_frame->data_length - 1] += WifiOperatData.Tx_data[CheckLoop];
+		}
+	return WifiSendData(WifiOperatData.Tx_data,wifi_frame->data_length);
+}
+
 
 
 
@@ -141,7 +167,7 @@ void ExecuteData(P_S_WifiFrame wifi_frame)
 void DealWifiData(void)
 {
 	S_WifiFrame WifiFrame = {0};
-	if(1 == WifiDeCode(WifiRecvData.Rx_data,WifiRecvData.recv_data_length,&WifiFrame))
+	if(1 == WifiDeCode(WifiOperatData.Rx_data,WifiOperatData.recv_data_length,&WifiFrame))
 		{
 			ExecuteData(&WifiFrame);
 		}

@@ -22,5 +22,6 @@ typedef struct
 	float Temperature2;//ÎÂ¶È
 	S_FermentorInfo Fermentor[MAX_FERMENTOR_NUMBER];
 }S_MachineInfo,*P_S_MachineInfo;
+extern S_MachineInfo MachineInfo;
 
 #endif

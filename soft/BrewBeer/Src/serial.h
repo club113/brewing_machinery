@@ -41,9 +41,9 @@ typedef struct
 	unsigned char Rx_data[SERIAL_RXBUFF_SIZE];
 	unsigned char Tx_data[SERIAL_TXBUFF_SIZE];
 }S_SerialRecvData,*P_S_SerialRecvData;
-extern S_SerialRecvData WifiRecvData;
-extern S_SerialRecvData Rs485_1RecvData;
-extern S_SerialRecvData Rs485_2RecvData;
+extern S_SerialRecvData WifiOperatData;
+extern S_SerialRecvData Rs485_1OperatData;
+extern S_SerialRecvData Rs485_2OperatData;
 
 
 void UsartReceive_IDLE(UART_HandleTypeDef *huart);

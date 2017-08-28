@@ -69,6 +69,28 @@ int main(void)
 {
 
   /* USER CODE BEGIN 1 */
+  static DATE_TIME time;
+  static long int time_;
+  GetDateTimeFromSecond(1503889076,&time);
+  time_ = GetSecondTime(&time);
+
+  
+  S_WifiFrame test;
+  MachineInfo.DeviceID[0]= 1;
+  MachineInfo.DeviceID[1]= 1;
+  MachineInfo.DeviceID[2]= 1;
+  MachineInfo.DeviceID[3]= 1;
+  MachineInfo.DeviceID[4]= 1;
+  MachineInfo.DeviceID[5]= 1;
+  MachineInfo.DeviceID[6]= 1;
+  MachineInfo.DeviceID[7]= 0;
+
+  test.data_length = 19;
+  test.format_control.fc.encrypt = 0;
+  test.format_control.fc.version = 0;
+  test.function = 0X01;
+
+  UploadDataByWifi(&test);
 
   /* USER CODE END 1 */
 
@@ -194,52 +216,52 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 	
 	if (htim == &WIFITIMER) {
   	HAL_TIM_Base_Stop_IT(&WIFITIMER);
-	if(WifiRecvData.DmaCNDTR==  WIFICOM.hdmarx->Instance->CNDTR)
+	if(WifiOperatData.DmaCNDTR==  WIFICOM.hdmarx->Instance->CNDTR)
 		{			
 			HAL_UART_DMAStop(&WIFICOM);   
-			WifiRecvData.recv_data_length= SERIAL_RXBUFF_SIZE -WifiRecvData.DmaCNDTR;
-			HAL_UART_Receive_DMA(&WIFICOM, WifiRecvData.Rx_data, SERIAL_RXBUFF_SIZE);  
+			WifiOperatData.recv_data_length= SERIAL_RXBUFF_SIZE -WifiOperatData.DmaCNDTR;
+			HAL_UART_Receive_DMA(&WIFICOM, WifiOperatData.Rx_data, SERIAL_RXBUFF_SIZE);  
 			SerialQueueData = WIFIMSG;
 			xQueueSendFromISR(SerialQueueHandle,&SerialQueueData,&xHigherPriorityTaskWoken);
 		}
 	else
 		{
 			HAL_TIM_Base_Start_IT(&WIFITIMER);
-			WifiRecvData.DmaCNDTR=  WIFICOM.hdmarx->Instance->CNDTR;
+			WifiOperatData.DmaCNDTR=  WIFICOM.hdmarx->Instance->CNDTR;
 		}
  	}
 
 	if (htim == &RS485TIMER1) {
   	HAL_TIM_Base_Stop_IT(&RS485TIMER1);
-	if(Rs485_1RecvData.DmaCNDTR==  RS485COM1.hdmarx->Instance->CNDTR)
+	if(Rs485_1OperatData.DmaCNDTR==  RS485COM1.hdmarx->Instance->CNDTR)
 		{			
 			HAL_UART_DMAStop(&RS485COM1);   
-			Rs485_1RecvData.recv_data_length= SERIAL_RXBUFF_SIZE -Rs485_1RecvData.DmaCNDTR;
-			HAL_UART_Receive_DMA(&RS485COM1, Rs485_1RecvData.Rx_data, SERIAL_RXBUFF_SIZE);  
+			Rs485_1OperatData.recv_data_length= SERIAL_RXBUFF_SIZE -Rs485_1OperatData.DmaCNDTR;
+			HAL_UART_Receive_DMA(&RS485COM1, Rs485_1OperatData.Rx_data, SERIAL_RXBUFF_SIZE);  
 			SerialQueueData = RS485_1MSG;
 			xQueueSendFromISR(SerialQueueHandle,&SerialQueueData,&xHigherPriorityTaskWoken);
 		}
 	else
 		{
 			HAL_TIM_Base_Start_IT(&RS485TIMER1);
-			Rs485_1RecvData.DmaCNDTR=  RS485COM1.hdmarx->Instance->CNDTR;
+			Rs485_1OperatData.DmaCNDTR=  RS485COM1.hdmarx->Instance->CNDTR;
 		}
   	}
 
 	if (htim == &RS485TIMER2) {
   	HAL_TIM_Base_Stop_IT(&RS485TIMER2);
-	if(Rs485_2RecvData.DmaCNDTR==  RS485COM2.hdmarx->Instance->CNDTR)
+	if(Rs485_2OperatData.DmaCNDTR==  RS485COM2.hdmarx->Instance->CNDTR)
 		{			
 			HAL_UART_DMAStop(&RS485COM2);   
-			Rs485_2RecvData.recv_data_length= SERIAL_RXBUFF_SIZE -Rs485_2RecvData.DmaCNDTR;
-			HAL_UART_Receive_DMA(&RS485COM2, Rs485_2RecvData.Rx_data, SERIAL_RXBUFF_SIZE);  
+			Rs485_2OperatData.recv_data_length= SERIAL_RXBUFF_SIZE -Rs485_2OperatData.DmaCNDTR;
+			HAL_UART_Receive_DMA(&RS485COM2, Rs485_2OperatData.Rx_data, SERIAL_RXBUFF_SIZE);  
 			SerialQueueData = RS485_2MSG;
 			xQueueSendFromISR(SerialQueueHandle,&SerialQueueData,&xHigherPriorityTaskWoken);
 		}
 	else
 		{
 			HAL_TIM_Base_Start_IT(&RS485TIMER2);
-			Rs485_2RecvData.DmaCNDTR=  RS485COM2.hdmarx->Instance->CNDTR;
+			Rs485_2OperatData.DmaCNDTR=  RS485COM2.hdmarx->Instance->CNDTR;
 		}
   	}
 	
