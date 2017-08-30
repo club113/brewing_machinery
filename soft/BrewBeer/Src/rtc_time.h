@@ -40,11 +40,18 @@ typedef struct date_time
 	unsigned short   iMin;
 	unsigned short   iSec;
 	unsigned short   iMsec;
+
+	long int TimeStamp;
 } DATE_TIME;
 extern DATE_TIME time_info;
 
 void GetDateTimeFromSecond(unsigned long lSec, DATE_TIME *tTime);
 unsigned long GetSecondTime(DATE_TIME *date_time);
+
+
+unsigned long GetDeviceTime(void);
+void SetDeviceTime(unsigned long time);
+
 void get_stnp_time(void);
 #endif
 

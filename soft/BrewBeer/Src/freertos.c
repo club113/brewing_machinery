@@ -224,17 +224,13 @@ void WatcherTask(void const * argument)
 {
   /* USER CODE BEGIN WatcherTask */
 	save_task_info();
-	S_WifiFrame msg;
-	msg.data_length = 19;
-	msg.format_control.fc_value = 1;
-	msg.function = CALLID;
   /* Infinite loop */
   for(;;)
   {
 	osDelay(2000);	
-	UploadDataByWifi(&msg);
-	UploadDataByRs485_1(&msg);
-	UploadDataByRs485_2(&msg);
+
+	//UploadDataByRs485_1(&msg);
+	//UploadDataByRs485_2(&msg);
   }
   /* USER CODE END WatcherTask */
 }

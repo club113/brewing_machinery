@@ -115,7 +115,7 @@ void UpdataDeviceTime(void)
 	HAL_RTC_GetTime(&hrtc,&rtc_time,RTC_FORMAT_BIN);
 	HAL_RTC_GetDate(&hrtc,&rtc_date,RTC_FORMAT_BIN);
 
-	time_info.iYear = rtc_date.Year;
+	time_info.iYear = rtc_date.Year + 2000;
 	time_info.iMon= rtc_date.Month;
 	time_info.iDay= rtc_date.Date;
 	time_info.iHour= rtc_time.Hours;
@@ -127,7 +127,8 @@ void UpdataDeviceTime(void)
 unsigned long GetDeviceTime(void)
 {
 	UpdataDeviceTime();
-	return GetSecondTime(&time_info);
+	time_info.TimeStamp = GetSecondTime(&time_info);
+	return time_info.TimeStamp;
 }
 
 void SetDeviceTime(unsigned long time)

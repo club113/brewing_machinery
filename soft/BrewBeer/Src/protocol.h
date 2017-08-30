@@ -2,13 +2,22 @@
 #define __PROTOCOL_H__
 #include "include.h"
 
-#define CALLID	0X01
-#define GETTEMP	0X02
-#define GETINFO	0X03
-#define SETDATE	0X04
+#define GETDEVICEINFO	0XA0
+#define GETSERVERTIME	0XA1
+
+#define CALLID	0XB0
+#define SETDATE	0XB1
+#define CTRLVALUE	0XB2
+#define SETPURCHASEVOLUME	0XB3
+#define CTRLMACHINE	0XB4
+#define GETFERMENTORID	0XB5
+#define GETFERMENTORINFO	0XB6
+#define SETUPLOADSETP	0XB7
 
 
-#define ARGMAXLENGTH	20
+
+
+#define ARGMAXLENGTH	40
 
 typedef struct
 {
@@ -32,17 +41,21 @@ typedef union
 
 typedef struct
 {
-	unsigned short data_length;
+	unsigned short data_length;//数据区长度
 	U_FormatControl format_control;
 	unsigned char DeviceID[8];	
 	unsigned char function;
 	unsigned char arg[ARGMAXLENGTH];
+	long int time;
 }S_WifiFrame,*P_S_WifiFrame;
 
 
 HAL_StatusTypeDef UploadDataByWifi(P_S_WifiFrame wifi_frame);
 HAL_StatusTypeDef UploadDataByRs485_1(P_S_WifiFrame wifi_frame);
 HAL_StatusTypeDef UploadDataByRs485_2(P_S_WifiFrame wifi_frame);
+
+void SetTimeStampIntoArrary(unsigned char* insert_point);
+long int GetTimeStampFromArrary(unsigned char* draw_point);
 
 void DealWifiData(void);
 

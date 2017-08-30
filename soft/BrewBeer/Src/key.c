@@ -126,7 +126,7 @@ void deal_key_value(unsigned key_value)
 				COM2LedBlink(400);
 				RuningLedBlink(300);
 				FaultLedBlink(200);
-				
+				upload_device_info(1);
 				break;
 
 			case(key1_long_press):
