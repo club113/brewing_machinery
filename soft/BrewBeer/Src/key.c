@@ -111,6 +111,7 @@ void deal_key_value(unsigned key_value)
 				break;
 
 			case(KEY_2_LONG_TRIGGER):
+				FaultLedBlink(50);
 				break;
 
 			case(KEY_1_LONG_LONG_TRIGGER):
@@ -121,6 +122,10 @@ void deal_key_value(unsigned key_value)
 				break;
 							
   			case(key1_press):
+				COM1LedBlink(500);
+				COM2LedBlink(400);
+				RuningLedBlink(300);
+				FaultLedBlink(200);
 				
 				break;
 
@@ -133,10 +138,15 @@ void deal_key_value(unsigned key_value)
 				break;
 				
 			case(key2_press): 
-				
+				COM1LedBlink(200);
+				COM2LedBlink(300);
+				RuningLedBlink(400);
+				FaultLedBlink(500);
+
 				break;
 
 			case(key2_long_press):
+				SET_SMART_LINK;
 				
 				break;
 				

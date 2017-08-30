@@ -146,7 +146,11 @@ void SystemTask(void const * argument)
 {
 
   /* USER CODE BEGIN SystemTask */
-  	save_task_info();
+	save_task_info();
+	WifiComStartRecv();
+	Rs485_1ComStartRecv();
+	Rs485_2ComStartRecv();
+	GetDeviceID(MachineInfo.DeviceID);
   /* Infinite loop */
   for(;;)
   {
@@ -161,6 +165,7 @@ void SerialServerTask(void const * argument)
   /* USER CODE BEGIN SerialServerTask */
   	unsigned int RecvMsg = 0;
   	save_task_info();
+	osDelay(1000);
   /* Infinite loop */
   for(;;)
   {
@@ -218,11 +223,18 @@ void DealKeyTask(void const * argument)
 void WatcherTask(void const * argument)
 {
   /* USER CODE BEGIN WatcherTask */
-  	save_task_info();
+	save_task_info();
+	S_WifiFrame msg;
+	msg.data_length = 19;
+	msg.format_control.fc_value = 1;
+	msg.function = CALLID;
   /* Infinite loop */
   for(;;)
   {
-    osDelay(1);
+	osDelay(2000);	
+	UploadDataByWifi(&msg);
+	UploadDataByRs485_1(&msg);
+	UploadDataByRs485_2(&msg);
   }
   /* USER CODE END WatcherTask */
 }

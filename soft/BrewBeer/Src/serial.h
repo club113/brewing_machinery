@@ -26,10 +26,13 @@ RS485COM2 -> RS485TIMER2
 ******************************************/
 
 
-#define ENABLE_RS485_1_TX		HAL_GPIO_WritePin(RS485_1_TX_EN_GPIO_Port,RS485_1_TX_EN_Pin,GPIO_PIN_RESET)
-#define DISABLE_RS485_1_TX		HAL_GPIO_WritePin(RS485_1_TX_EN_GPIO_Port,RS485_1_TX_EN_Pin,GPIO_PIN_SET)
-#define ENABLE_RS485_2_TX		HAL_GPIO_WritePin(RS485_2_TX_EN_GPIO_Port,RS485_2_TX_EN_Pin,GPIO_PIN_RESET)
-#define DISABLE_RS485_2_TX		HAL_GPIO_WritePin(RS485_2_TX_EN_GPIO_Port,RS485_2_TX_EN_Pin,GPIO_PIN_SET)
+#define ENABLE_RS485_1_RX		HAL_GPIO_WritePin(RS485_1_TX_EN_GPIO_Port,RS485_1_TX_EN_Pin,GPIO_PIN_RESET)
+#define DISABLE_RS485_1_RX		HAL_GPIO_WritePin(RS485_1_TX_EN_GPIO_Port,RS485_1_TX_EN_Pin,GPIO_PIN_SET)
+#define ENABLE_RS485_1_TX		HAL_GPIO_WritePin(RS485_1_TX_EN_GPIO_Port,RS485_1_TX_EN_Pin,GPIO_PIN_SET)
+
+#define ENABLE_RS485_2_RX		HAL_GPIO_WritePin(RS485_2_TX_EN_GPIO_Port,RS485_2_TX_EN_Pin,GPIO_PIN_RESET)
+#define DISABLE_RS485_2_RX		HAL_GPIO_WritePin(RS485_2_TX_EN_GPIO_Port,RS485_2_TX_EN_Pin,GPIO_PIN_SET)
+#define ENABLE_RS485_2_TX		HAL_GPIO_WritePin(RS485_2_TX_EN_GPIO_Port,RS485_2_TX_EN_Pin,GPIO_PIN_SET)
 
 #define SERIAL_RXBUFF_SIZE	300
 #define SERIAL_TXBUFF_SIZE	100
@@ -47,6 +50,11 @@ extern S_SerialRecvData Rs485_2OperatData;
 
 
 void UsartReceive_IDLE(UART_HandleTypeDef *huart);
+
+void WifiComStartRecv(void);
+void Rs485_1ComStartRecv(void);
+void Rs485_2ComStartRecv(void);
+
 
 void DealWifiRecvData(void);
 void DealRs485_1RecvData(void);

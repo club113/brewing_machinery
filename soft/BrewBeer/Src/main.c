@@ -69,29 +69,7 @@ int main(void)
 {
 
   /* USER CODE BEGIN 1 */
-  static DATE_TIME time;
-  static long int time_;
-  GetDateTimeFromSecond(1503889076,&time);
-  time_ = GetSecondTime(&time);
-
   
-  S_WifiFrame test;
-  MachineInfo.DeviceID[0]= 1;
-  MachineInfo.DeviceID[1]= 1;
-  MachineInfo.DeviceID[2]= 1;
-  MachineInfo.DeviceID[3]= 1;
-  MachineInfo.DeviceID[4]= 1;
-  MachineInfo.DeviceID[5]= 1;
-  MachineInfo.DeviceID[6]= 1;
-  MachineInfo.DeviceID[7]= 0;
-
-  test.data_length = 19;
-  test.format_control.fc.encrypt = 0;
-  test.format_control.fc.version = 0;
-  test.function = 0X01;
-
-  UploadDataByWifi(&test);
-
   /* USER CODE END 1 */
 
   /* MCU Configuration----------------------------------------------------------*/
@@ -118,7 +96,20 @@ int main(void)
   MX_USART3_UART_Init();
 
   /* USER CODE BEGIN 2 */
+
+  	PH_POWER_ON;
+  	ENABLE_RS485_1_RX;
+  	ENABLE_RS485_2_RX;
+
+  	RELEASE_SMART_LINK;
+  	RELEASE_WIFI_RESET;
+	
+	//SET_SMART_LINK;
 	InitSoftTimer();
+  	COM1LedBlink(500);
+  	COM2LedBlink(400);
+  	RuningLedBlink(300);
+  	FaultLedBlink(100);
   /* USER CODE END 2 */
 
   /* Call init function for freertos objects (in freertos.c) */
@@ -222,6 +213,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 			WifiOperatData.recv_data_length= SERIAL_RXBUFF_SIZE -WifiOperatData.DmaCNDTR;
 			HAL_UART_Receive_DMA(&WIFICOM, WifiOperatData.Rx_data, SERIAL_RXBUFF_SIZE);  
 			SerialQueueData = WIFIMSG;
+			RuningLedBlink(10);
 			xQueueSendFromISR(SerialQueueHandle,&SerialQueueData,&xHigherPriorityTaskWoken);
 		}
 	else
@@ -239,6 +231,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 			Rs485_1OperatData.recv_data_length= SERIAL_RXBUFF_SIZE -Rs485_1OperatData.DmaCNDTR;
 			HAL_UART_Receive_DMA(&RS485COM1, Rs485_1OperatData.Rx_data, SERIAL_RXBUFF_SIZE);  
 			SerialQueueData = RS485_1MSG;
+			COM1LedBlink(10);
 			xQueueSendFromISR(SerialQueueHandle,&SerialQueueData,&xHigherPriorityTaskWoken);
 		}
 	else
@@ -256,6 +249,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 			Rs485_2OperatData.recv_data_length= SERIAL_RXBUFF_SIZE -Rs485_2OperatData.DmaCNDTR;
 			HAL_UART_Receive_DMA(&RS485COM2, Rs485_2OperatData.Rx_data, SERIAL_RXBUFF_SIZE);  
 			SerialQueueData = RS485_2MSG;
+			COM2LedBlink(10);
 			xQueueSendFromISR(SerialQueueHandle,&SerialQueueData,&xHigherPriorityTaskWoken);
 		}
 	else

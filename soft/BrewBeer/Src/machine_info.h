@@ -24,4 +24,6 @@ typedef struct
 }S_MachineInfo,*P_S_MachineInfo;
 extern S_MachineInfo MachineInfo;
 
+void GetDeviceID(unsigned char* buf);
+
 #endif

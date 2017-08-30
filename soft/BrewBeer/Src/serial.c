@@ -45,7 +45,7 @@ void UsartReceive_IDLE(UART_HandleTypeDef *huart)
 void WifiComStartRecv(void)
 {
 	HAL_UART_Receive_DMA(&WIFICOM, WifiOperatData.Rx_data, SERIAL_RXBUFF_SIZE);  
-	__HAL_UART_ENABLE_IT(&WIFICOM, UART_IT_IDLE);
+	__HAL_UART_ENABLE_IT(&huart2, UART_IT_IDLE);
 }
 
 void Rs485_1ComStartRecv(void)

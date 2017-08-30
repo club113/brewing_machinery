@@ -3,9 +3,9 @@
 #include "include.h"
 
 #define CALLID	0X01
-#define GETTEMP	0X01
-#define GETINFO	0X01
-#define SETDATE	0X01
+#define GETTEMP	0X02
+#define GETINFO	0X03
+#define SETDATE	0X04
 
 
 #define ARGMAXLENGTH	20
@@ -41,7 +41,8 @@ typedef struct
 
 
 HAL_StatusTypeDef UploadDataByWifi(P_S_WifiFrame wifi_frame);
-
+HAL_StatusTypeDef UploadDataByRs485_1(P_S_WifiFrame wifi_frame);
+HAL_StatusTypeDef UploadDataByRs485_2(P_S_WifiFrame wifi_frame);
 
 void DealWifiData(void);
 
