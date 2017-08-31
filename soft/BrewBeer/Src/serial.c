@@ -68,7 +68,7 @@ void DealWifiRecvData(void)
 
 void DealRs485_1RecvData(void)
 {
-
+	DealPLCData();
 }
 
 void DealRs485_2RecvData(void)

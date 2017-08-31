@@ -3,6 +3,10 @@
 
 unsigned char CheckDeviceID(P_S_WifiFrame wifi_frame)
 {
+	if(NULL == wifi_frame)
+		{
+			return 0;
+		}
 	unsigned char loop8 = 0;
 	for(;loop8 < 8; loop8++)
 		{
@@ -22,7 +26,7 @@ unsigned char upload_device_info(char* parameter)
 	CheckDeviceID(wifi_frame);
 	
 		
-	S_WifiFrame msg;
+	S_WifiFrame msg={0};
 	msg.data_length = 18;
 	msg.format_control.fc.encrypt = 0;
 	msg.format_control.fc.version = 0;
@@ -38,7 +42,7 @@ unsigned char get_server_time(char* parameter)
 	wifi_frame = (P_S_WifiFrame)parameter;
 	CheckDeviceID(wifi_frame);
 		
-	S_WifiFrame msg;
+	S_WifiFrame msg={0};
 	msg.data_length = 4;
 	msg.format_control.fc.encrypt = 0;
 	msg.format_control.fc.version = 0;
@@ -55,7 +59,7 @@ unsigned char get_device_id(char* parameter)
 	wifi_frame = (P_S_WifiFrame)parameter;
 	CheckDeviceID(wifi_frame);
 		
-	S_WifiFrame msg;
+	S_WifiFrame msg={0};
 	msg.data_length = 4;
 	msg.format_control.fc_value = 1;
 	msg.function = CALLID;	
@@ -71,7 +75,7 @@ unsigned char get_temp(char* parameter)
 		{
 			return 0;
 		}
-	return 1;
+	return 0;
 }
 
 
@@ -89,13 +93,184 @@ unsigned char get_device_info(char* parameter)
 unsigned char set_device_date(char* parameter)
 {
 	P_S_WifiFrame wifi_frame =NULL;
+	S_WifiFrame msg={0};//回复消息
+	long int time_from_server = 0;
+	
 	wifi_frame = (P_S_WifiFrame)parameter;
-	if(0 == CheckDeviceID(wifi_frame))
+	if(0 == CheckDeviceID(wifi_frame)&&(4 != wifi_frame->data_length))
+		{
+			return 0;//数据帧错误
+		}
+	time_from_server = GetTimeStampFromArrary(wifi_frame->arg);
+	SetDeviceTime(time_from_server);
+
+	msg.data_length = 4;
+	msg.format_control.fc.encrypt = 0;
+	msg.format_control.fc.version= 0;
+	msg.function = SETDATE;	
+	SetTimeStampIntoArrary(msg.arg);
+	UploadDataByWifi(&msg);
+	return 1;
+}
+
+unsigned char ctrl_device_value(char* parameter)
+{
+	P_S_WifiFrame wifi_frame =NULL;
+	S_WifiFrame msg={0};//回复消息
+	wifi_frame = (P_S_WifiFrame)parameter;
+	if(0 == CheckDeviceID(wifi_frame)&&(1 != wifi_frame->data_length))
+		{
+			return 0;//数据帧错误
+		}
+
+	if(0 == wifi_frame->arg[0])
+		{
+			//关闭出酒阀
+		}
+
+	if(1 == wifi_frame->arg[0])
+		{
+			//打开出酒阀
+		}
+
+	if(2 == wifi_frame->arg[0])
+		{
+			//打开屏幕?
+		}
+
+	if(3 == wifi_frame->arg[0])
+		{
+			//打开屏幕?
+		}
+
+	msg.data_length = 5;
+	msg.format_control.fc.encrypt = 0;
+	msg.format_control.fc.version= 0;
+	msg.function = CTRLVALUE;	
+	msg.arg[0] = 1;//发酵罐出酒阀状态
+	SetTimeStampIntoArrary(msg.arg+1);
+	UploadDataByWifi(&msg);
+	return 1;
+}
+
+
+unsigned char set_purchase_volume(char* parameter)
+{
+	P_S_WifiFrame wifi_frame =NULL;
+	S_WifiFrame msg={0};//回复消息
+	unsigned short purchase_volume = 0;//服务器发来的预购容量
+	
+	wifi_frame = (P_S_WifiFrame)parameter;
+	if(0 == CheckDeviceID(wifi_frame)&&(2 != wifi_frame->data_length))
+		{
+			return 0;//数据帧错误
+		}
+
+	purchase_volume |= wifi_frame->arg[0];
+	purchase_volume <<= 8;
+	purchase_volume |= wifi_frame->arg[1];
+
+	//set_volume(purchase_volume);
+
+	msg.data_length = 4;
+	msg.format_control.fc.encrypt = 0;
+	msg.format_control.fc.version= 0;
+	msg.function = SETPURCHASEVOLUME;
+	SetTimeStampIntoArrary(msg.arg);
+	UploadDataByWifi(&msg);
+	return 1;	
+}
+
+unsigned char ctrl_machine(char* parameter)
+{
+	P_S_WifiFrame wifi_frame =NULL;
+	S_WifiFrame msg={0};//回复消息
+	
+	wifi_frame = (P_S_WifiFrame)parameter;
+	if(0 == CheckDeviceID(wifi_frame)&&(3 != wifi_frame->data_length))
+		{
+			return 0;//数据帧错误
+		}	
+
+	//set_machine_status(wifi_frame->arg[0]);
+	//set_automod(wifi_frame->arg[1]);
+	//set_formula(wifi_frame->arg[2]);
+
+	msg.data_length = 4;
+	msg.format_control.fc.encrypt = 0;
+	msg.format_control.fc.version= 0;
+	msg.function = CTRLMACHINE;
+	SetTimeStampIntoArrary(msg.arg);
+	UploadDataByWifi(&msg);
+	return 1;	
+}
+
+unsigned char get_fermentor_ID(char* parameter)
+{
+	P_S_WifiFrame wifi_frame =NULL;
+	S_WifiFrame msg={0};//回复消息
+	
+	wifi_frame = (P_S_WifiFrame)parameter;
+	if(0 == CheckDeviceID(wifi_frame)&&(0 != wifi_frame->data_length))
+		{
+			return 0;//数据帧错误
+		}	
+
+	msg.data_length = 4;
+	msg.format_control.fc.encrypt = 0;
+	msg.format_control.fc.version= 0;
+	msg.function = GETFERMENTORID;
+	SetTimeStampIntoArrary(msg.arg);
+	UploadDataByWifi(&msg);
+	return 1;	
+}
+
+unsigned char get_fermentor_INFO(char* parameter)
+{
+	P_S_WifiFrame wifi_frame =NULL;	
+	wifi_frame = (P_S_WifiFrame)parameter;
+	unsigned short fermentor_ID;
+	if(0 == CheckDeviceID(wifi_frame)&&(2 != wifi_frame->data_length))
 		{
 			return 0;
 		}
-	return 0;
+	fermentor_ID |= wifi_frame->arg[0];
+	fermentor_ID <<= 8;
+	fermentor_ID |= wifi_frame->arg[1];
+
+	//upload_fermentor_info(fermentor_ID);
+		
+	return 1;	
 }
+
+unsigned char set_autoupload_step(char* parameter)
+{
+	P_S_WifiFrame wifi_frame =NULL;
+	S_WifiFrame msg={0};//回复消息
+	unsigned int upload_step = 0;
+	
+	wifi_frame = (P_S_WifiFrame)parameter;
+	if(0 == CheckDeviceID(wifi_frame)&&(2 != wifi_frame->data_length))
+		{
+			return 0;//数据帧错误
+		}	
+	upload_step |= wifi_frame->arg[0];
+	upload_step <<= 8;
+	upload_step |= wifi_frame->arg[1];
+
+	//set_uoload_step(upload_step);
+	SetAutoUpload(upload_step*1000);
+
+	msg.data_length = 4;
+	msg.format_control.fc.encrypt = 0;
+	msg.format_control.fc.version= 0;
+	msg.function = SETUPLOADSETP;
+	SetTimeStampIntoArrary(msg.arg);
+	UploadDataByWifi(&msg);
+	return 1;	
+}
+
+
 
 HAL_StatusTypeDef WifiSendData(unsigned char* pTxData, unsigned short Size)
 {
@@ -285,12 +460,12 @@ S_Cmd cmd_list[] =
 
 {CALLID,get_device_id,"get device id"},//服务器获取机器ID
 {SETDATE,set_device_date,"set device  date"},//设置设备时间
-{CTRLVALUE,get_device_id,"ctrl value"},//控制出酒阀
-{SETPURCHASEVOLUME,set_device_date,"set device  date"},//设置购买酒的容量
-{CTRLMACHINE,get_device_id,"get device id"},//控制酿酒机
-{GETFERMENTORID,set_device_date,"set device  date"},//获取发酵罐ID
-{GETFERMENTORINFO,get_device_id,"get device id"},//获取指定发酵罐的信息
-{SETUPLOADSETP,set_device_date,"set device  date"},//设置定时上传时间间隔
+{CTRLVALUE,ctrl_device_value,"ctrl value"},//控制出酒阀
+{SETPURCHASEVOLUME,set_purchase_volume,"set purchase  volume"},//设置购买酒的容量
+{CTRLMACHINE,ctrl_machine,"get device id"},//控制酿酒机
+{GETFERMENTORID,get_fermentor_ID,"set device  date"},//获取发酵罐ID
+{GETFERMENTORINFO,get_fermentor_INFO,"get device id"},//获取指定发酵罐的信息
+{SETUPLOADSETP,set_autoupload_step,"set device  date"},//设置定时上传时间间隔
 };
 
 
@@ -344,5 +519,60 @@ void DealWifiData(void)
 		{
 			ExecuteData(&WifiFrame);
 		}
+}
+/***********************************************↑SERVER↑**********************************************************/
+
+/***********************************************↓PLC↓**********************************************************/
+
+
+
+
+
+unsigned char PLCDecode(unsigned char* data,unsigned short recv_data_length,P_S_PLCRecvFrame plc_frame)
+{
+	if(7 != recv_data_length)	
+		{
+			return 0;
+		}
+	memcpy(plc_frame,data,7);
+	return 1;
+}
+
+unsigned char GetFermenterID(unsigned short FermentorID)
+{
+
+	unsigned char loopx = 0;
+	for(;loopx < MachineInfo.FermentorNum; loopx ++)
+		{
+			if(FermentorID == MachineInfo.Fermentor[loopx].FermentorID)
+				{
+					return loopx;
+				}
+		}
+	return 0XFF;
+}
+
+void UpdataMachineInfo(unsigned char fermentor_num,P_S_PLCRecvFrame plc_frame)
+{
+	if(fermentor_num > MachineInfo.FermentorNum)
+		{
+			return;//不合法发酵罐保存地址
+		}
+	MachineInfo.RuningStage = plc_frame->DeviceStatus;
+	MachineInfo.Fermentor[fermentor_num].LeftVolume = plc_frame->LeftVloume;
+	MachineInfo.Fermentor[fermentor_num].UsedVolume = plc_frame->UsedVloume;
+	MachineInfo.Fermentor[fermentor_num].PressValue = plc_frame->PressValue;
+	MachineInfo.Fermentor[fermentor_num].Temperature = plc_frame->Temperture;
+}
+
+
+void DealPLCData(void)
+{
+	S_PLCRecvFrame plc_frame = {0};
+	unsigned short default_fermentorID = 0;
+	if(1 == PLCDecode(Rs485_1OperatData.Rx_data,Rs485_1OperatData.recv_data_length,&plc_frame))
+		{
+			UpdataMachineInfo(GetFermenterID(default_fermentorID),&plc_frame);
+		}	
 }
 

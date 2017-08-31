@@ -49,6 +49,18 @@ typedef struct
 	long int time;
 }S_WifiFrame,*P_S_WifiFrame;
 
+typedef struct
+{
+	unsigned char DeviceAddress;//设备地址
+	unsigned char UsedVloume;//已使用容量
+	unsigned char DeviceStatus;//设备状态
+	unsigned char BeerValueStatus;//出酒阀状态
+	unsigned char LeftVloume;//当前液位 剩余容量
+	unsigned char PressValue;//发酵罐压力
+	unsigned char Temperture;//发酵罐温度
+}S_PLCRecvFrame,*P_S_PLCRecvFrame;
+
+unsigned char upload_device_info(char* parameter);
 
 HAL_StatusTypeDef UploadDataByWifi(P_S_WifiFrame wifi_frame);
 HAL_StatusTypeDef UploadDataByRs485_1(P_S_WifiFrame wifi_frame);
@@ -58,6 +70,7 @@ void SetTimeStampIntoArrary(unsigned char* insert_point);
 long int GetTimeStampFromArrary(unsigned char* draw_point);
 
 void DealWifiData(void);
+void DealPLCData(void);
 
 
 #endif

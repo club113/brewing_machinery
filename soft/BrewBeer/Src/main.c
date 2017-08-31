@@ -110,6 +110,7 @@ int main(void)
   	COM2LedBlink(400);
   	RuningLedBlink(300);
   	FaultLedBlink(100);
+	SetAutoUpload(MachineInfo.UploadStepTime);//设置定时上传
   /* USER CODE END 2 */
 
   /* Call init function for freertos objects (in freertos.c) */

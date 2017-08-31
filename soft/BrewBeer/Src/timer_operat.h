@@ -32,6 +32,7 @@ typedef struct
 	unsigned int timer_tick;
 	unsigned int second_tick;
 }S_Timer_Counter,*P_S_Timer_Counter;
+extern S_Timer_Counter timer_counter;
 
 
 unsigned char register_value_into_timer(unsigned int count_value,unsigned char mod);

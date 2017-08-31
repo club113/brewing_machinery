@@ -8,22 +8,32 @@
 typedef struct
 {
 	unsigned char Mac[8];
-	unsigned int FermentorID;
-	float Temperature;//温度
-	float Capacity;//容量
+	unsigned char IsAlive;
+	unsigned short FermentorID;
+	unsigned short Capacity;//容量
+	unsigned short UsedVolume;//已使用容量
+	unsigned short LeftVolume;//剩余容量
+	unsigned short Temperature;//温度
+	unsigned short PressValue;//发酵罐压力
+	long int StartFermentTime;
 }S_FermentorInfo,*P_S_FermentorInfo;
 
 typedef struct
 {
 	unsigned char DeviceID[8];
 	unsigned char RuningStage;//工作阶段
-	unsigned short UploadStepTime;
+	unsigned char AutoUploadTimerStatus;//软件定时器状态0 未开启   1开启
+	unsigned char AutoUploadTimer;//定时上传使用的计时器
+	unsigned int UploadStepTime;//定时上传时间间隔
 	float Temperature1;//温度	
 	float Temperature2;//温度
+	unsigned short FermentorNum;
+	unsigned short AliveNum;
 	S_FermentorInfo Fermentor[MAX_FERMENTOR_NUMBER];
 }S_MachineInfo,*P_S_MachineInfo;
 extern S_MachineInfo MachineInfo;
 
 void GetDeviceID(unsigned char* buf);
+void SetAutoUpload(unsigned int msec);
 
 #endif
