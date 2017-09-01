@@ -1,4 +1,3 @@
-
 #include "protocol.h"
 
 unsigned char CheckDeviceID(P_S_WifiFrame wifi_frame)
@@ -534,7 +533,7 @@ unsigned char PLCDecode(unsigned char* data,unsigned short recv_data_length,P_S_
 		{
 			return 0;
 		}
-	memcpy(plc_frame,data,7);
+	memcpy(plc_frame,data,RS485RECVFRAMELENGTH);
 	return 1;
 }
 
@@ -565,6 +564,13 @@ void UpdataMachineInfo(unsigned char fermentor_num,P_S_PLCRecvFrame plc_frame)
 	MachineInfo.Fermentor[fermentor_num].Temperature = plc_frame->Temperture;
 }
 
+
+HAL_StatusTypeDef CtrlPLC(P_S_PLCSendFrame sendframe)
+{
+	HAL_StatusTypeDef res;
+	res = Rs4851SendData((unsigned char*)sendframe,RS485SENDFRAMELENGTH);	
+	return res;
+}
 
 void DealPLCData(void)
 {

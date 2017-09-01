@@ -97,6 +97,15 @@ unsigned char loopx = 0;
 
 void deal_key_value(unsigned key_value)
 {
+	S_PLCSendFrame test;
+	test.DeviceAddress = 1;
+	test.PurchaseVloume = 2;
+	test.EnablePurchase = 3;
+	test.Formula = 4;
+	test.StartSaccharify = 5;
+	test.StartWash = 6;
+	test.AutoShutDown = 7;
+	test.BeerValueStatus = 8;
 	switch(key_value)
   		{
   			case(KEY_1_TRIGGER):
@@ -142,6 +151,8 @@ void deal_key_value(unsigned key_value)
 				COM2LedBlink(300);
 				RuningLedBlink(400);
 				FaultLedBlink(500);
+
+				CtrlPLC(&test);
 
 				break;
 

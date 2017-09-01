@@ -18,7 +18,7 @@
 #include "machine_info.h"
 #include "serial.h"
 #include "wifi.h"
-
+#include "flash.h"
 #include "led.h"
 #include "crc.h"
 #include "cpu.h"

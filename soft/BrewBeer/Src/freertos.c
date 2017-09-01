@@ -51,7 +51,7 @@ osMessageQId KeyQueueHandle;
 osMessageQId SysQueueHandle;
 
 /* USER CODE BEGIN Variables */
-
+osMessageQId flash_queueHandle;
 /* USER CODE END Variables */
 
 /* Function prototypes -------------------------------------------------------*/
@@ -138,6 +138,8 @@ void MX_FREERTOS_Init(void) {
 
   /* USER CODE BEGIN RTOS_QUEUES */
   /* add queues, ... */
+  osMessageQDef(FashQueue, 8, uint32_t);
+  flash_queueHandle = osMessageCreate(osMessageQ(FashQueue), NULL);
   /* USER CODE END RTOS_QUEUES */
 }
 
