@@ -106,10 +106,10 @@ int main(void)
 	
 	//SET_SMART_LINK;
 	InitSoftTimer();
-  	COM1LedBlink(500);
-  	COM2LedBlink(400);
-  	RuningLedBlink(300);
-  	FaultLedBlink(100);
+  	COM1LedBlink(500,0);
+  	COM2LedBlink(400,0);
+  	RuningLedBlink(300,0);
+  	FaultLedBlink(100,0);
 	SetAutoUpload(MachineInfo.UploadStepTime);//设置定时上传
   /* USER CODE END 2 */
 
@@ -214,7 +214,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 			WifiOperatData.recv_data_length= SERIAL_RXBUFF_SIZE -WifiOperatData.DmaCNDTR;
 			HAL_UART_Receive_DMA(&WIFICOM, WifiOperatData.Rx_data, SERIAL_RXBUFF_SIZE);  
 			SerialQueueData = WIFIMSG;
-			RuningLedBlink(10);
+			COM2LedBlink(10,0);
 			xQueueSendFromISR(SerialQueueHandle,&SerialQueueData,&xHigherPriorityTaskWoken);
 		}
 	else
@@ -232,7 +232,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 			Rs485_1OperatData.recv_data_length= SERIAL_RXBUFF_SIZE -Rs485_1OperatData.DmaCNDTR;
 			HAL_UART_Receive_DMA(&RS485COM1, Rs485_1OperatData.Rx_data, SERIAL_RXBUFF_SIZE);  
 			SerialQueueData = RS485_1MSG;
-			COM1LedBlink(10);
+			COM1LedBlink(10,0);
 			xQueueSendFromISR(SerialQueueHandle,&SerialQueueData,&xHigherPriorityTaskWoken);
 		}
 	else
@@ -250,7 +250,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 			Rs485_2OperatData.recv_data_length= SERIAL_RXBUFF_SIZE -Rs485_2OperatData.DmaCNDTR;
 			HAL_UART_Receive_DMA(&RS485COM2, Rs485_2OperatData.Rx_data, SERIAL_RXBUFF_SIZE);  
 			SerialQueueData = RS485_2MSG;
-			COM2LedBlink(10);
+			//COM2LedBlink(10,0);
 			xQueueSendFromISR(SerialQueueHandle,&SerialQueueData,&xHigherPriorityTaskWoken);
 		}
 	else

@@ -26,7 +26,7 @@
 #include "protocol.h"
 #include "timer_operat.h"
 #include "rtc_time.h"
-
+#include "iap.h"
 
 extern osMessageQId SerialQueueHandle;
 extern osMessageQId KeyQueueHandle;

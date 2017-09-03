@@ -116,11 +116,12 @@ void deal_key_value(unsigned key_value)
 				break;
 				
 			case(KEY_1_LONG_TRIGGER):
+				FaultLedBlink(50,0);
 				
 				break;
 
 			case(KEY_2_LONG_TRIGGER):
-				FaultLedBlink(50);
+				FaultLedBlink(50,0);
 				break;
 
 			case(KEY_1_LONG_LONG_TRIGGER):
@@ -131,15 +132,15 @@ void deal_key_value(unsigned key_value)
 				break;
 							
   			case(key1_press):
-				COM1LedBlink(500);
-				COM2LedBlink(400);
-				RuningLedBlink(300);
-				FaultLedBlink(200);
+				COM1LedBlink(500,0);
+				COM2LedBlink(400,0);
+				RuningLedBlink(300,0);
+				FaultLedBlink(200,0);
 				upload_device_info(NULL);
 				break;
 
 			case(key1_long_press):
-				
+				//A_T_Set_SockB_Server(1,192,168,1,198,8888);
 				break;
 
 			case(key1_long_long_press):
@@ -147,10 +148,10 @@ void deal_key_value(unsigned key_value)
 				break;
 				
 			case(key2_press): 
-				COM1LedBlink(200);
-				COM2LedBlink(300);
-				RuningLedBlink(400);
-				FaultLedBlink(500);
+				COM1LedBlink(200,0);
+				COM2LedBlink(300,0);
+				RuningLedBlink(400,0);
+				FaultLedBlink(500,0);
 
 				CtrlPLC(&test);
 

@@ -21,10 +21,10 @@
 #define FAULT_LED_OFF		HAL_GPIO_WritePin(FAULT_LED_GPIO_Port,FAULT_LED_Pin,GPIO_PIN_SET)
 #define FAULT_LED_TOG		HAL_GPIO_TogglePin(FAULT_LED_GPIO_Port,FAULT_LED_Pin)
 
-void RuningLedBlink(unsigned int time);
-void COM1LedBlink(unsigned int time);
-void COM2LedBlink(unsigned int time);
-void FaultLedBlink(unsigned int time);
+void RuningLedBlink(unsigned int time,unsigned char mod);
+void COM1LedBlink(unsigned int time,unsigned char mod);
+void COM2LedBlink(unsigned int time,unsigned char mod);
+void FaultLedBlink(unsigned int time,unsigned char mod);
 
 #endif
 

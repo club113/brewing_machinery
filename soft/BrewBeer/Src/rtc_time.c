@@ -136,8 +136,7 @@ void SetDeviceTime(unsigned long time)
 	GetDateTimeFromSecond(time,&time_info);
 	
 	RTC_TimeTypeDef rtc_time = {0};
-	RTC_DateTypeDef rtc_date = {0};
-	
+	RTC_DateTypeDef rtc_date = {0};	
 	rtc_date.Year = time_info.iYear - 2000;
 	rtc_date.Month = time_info.iMon;
 	rtc_date.Date = time_info.iDay;

@@ -153,6 +153,7 @@ void SystemTask(void const * argument)
 	Rs485_1ComStartRecv();
 	Rs485_2ComStartRecv();
 	GetDeviceID(MachineInfo.DeviceID);
+	RuningLedBlink(1200,1);
   /* Infinite loop */
   for(;;)
   {

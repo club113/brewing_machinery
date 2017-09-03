@@ -21,6 +21,7 @@ typedef struct
 typedef struct
 {
 	unsigned char DeviceID[8];
+	unsigned char DeviceAddress;
 	unsigned char RuningStage;//工作阶段
 	unsigned char AutoUploadTimerStatus;//软件定时器状态0 未开启   1开启
 	unsigned char AutoUploadTimer;//定时上传使用的计时器

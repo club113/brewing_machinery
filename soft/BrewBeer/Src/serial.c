@@ -4,7 +4,14 @@ S_SerialRecvData WifiOperatData;
 S_SerialRecvData Rs485_1OperatData;
 S_SerialRecvData Rs485_2OperatData;
 
-
+void ClearRecvData(P_S_SerialRecvData OperatData)
+{
+	unsigned short loopx = 0;
+	for(;loopx < SERIAL_RXBUFF_SIZE; loopx ++)
+		{
+			OperatData->Rx_data[loopx] = 0;
+		}
+}
 
 
 void UsartReceive_IDLE(UART_HandleTypeDef *huart)  

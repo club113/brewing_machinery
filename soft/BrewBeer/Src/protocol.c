@@ -518,6 +518,10 @@ void DealWifiData(void)
 		{
 			ExecuteData(&WifiFrame);
 		}
+	if((WifiOperatData.Rx_data[7]==0XF0)||(WifiOperatData.Rx_data[7]==0XF1)||(WifiOperatData.Rx_data[7]==0XF2))//wifi Ô¶³ÌÉý¼¶
+		{
+			wifi_iap_operater();
+		}
 }
 /***********************************************¡üSERVER¡ü**********************************************************/
 

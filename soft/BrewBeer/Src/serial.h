@@ -48,6 +48,7 @@ extern S_SerialRecvData WifiOperatData;
 extern S_SerialRecvData Rs485_1OperatData;
 extern S_SerialRecvData Rs485_2OperatData;
 
+void ClearRecvData(P_S_SerialRecvData OperatData);
 
 void UsartReceive_IDLE(UART_HandleTypeDef *huart);
 

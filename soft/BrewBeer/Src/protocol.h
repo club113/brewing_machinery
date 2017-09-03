@@ -92,6 +92,7 @@ void DealWifiData(void);
 void DealPLCData(void);
 HAL_StatusTypeDef CtrlPLC(P_S_PLCSendFrame sendframe);
 
+HAL_StatusTypeDef WifiSendData(unsigned char* pTxData, unsigned short Size);
 
 #endif
 
