@@ -199,6 +199,59 @@ void choose_app(void)
 
 
 
+
+
+
+void ClearRetryFlag(void)
+{
+	wifi_iap_info.need_retry = 0;
+	wifi_iap_info.timer_set_flag = 0;
+}
+
+void WifiIapStopRetryFunction(void)
+{
+	if(1 == wifi_iap_info.start_retry)
+		{
+			wifi_iap_info.start_retry = 0;//关闭超时重传
+			timer_free(wifi_iap_info.retry_timer);
+		}
+}
+
+
+
+void RetryFunction(void* arg)
+{
+	if(1 == wifi_iap_info.timer_set_flag)
+		{
+			if(1 == wifi_iap_info.need_retry)
+				{
+					if(0 == wifi_iap_info.retry_times)
+						{
+							WifiIapStopRetryFunction();
+							return;
+						}
+					wifi_iap_info.retry_times --;
+					wifi_iap_request_page(wifi_iap_info.request_page);
+				}
+			wifi_iap_info.need_retry = 1;
+		}
+	wifi_iap_info.timer_set_flag = 1;
+}
+
+void WifiIapStartRetryFunction(unsigned short retry_interval,unsigned char retry_time)
+{
+	wifi_iap_info.retry_times = retry_time;
+	wifi_iap_info.retry_timer = register_value_into_timer(retry_interval,1);
+	if(0XFF != wifi_iap_info.retry_timer)
+		{
+			wifi_iap_info.start_retry = 1;//启动超时重传标志位
+			register_callback_function_into_timer(wifi_iap_info.retry_timer,RetryFunction);
+		}
+}
+
+
+
+
 void init_save_data(void)
 {
 	//reset_iap_buff();
@@ -255,6 +308,7 @@ void wifi_iap_cmd_operat(P_S_Wifi_Iap_Cmd cmd_parameter)
 
 void wifi_iap_request_page(unsigned int page)
 {
+	ClearRetryFlag();
 	//unsigned char page_num[2] = {0};
 	//page_num[1] = page&0X000000FF;
 	//page_num[0] = (page>>8)&0X000000FF;
@@ -378,8 +432,14 @@ void wifi_iap_operater(void)
 			wifi_iap_info.total_size |= WifiOperatData.Rx_data[12];
 			wifi_iap_info.total_size <<= 8;
 			wifi_iap_info.total_size |= WifiOperatData.Rx_data[13];
+			wifi_iap_info.total_page = (wifi_iap_info.total_size)/WIFI_IAP_PAGE_SIZE;
+			if((wifi_iap_info.total_size)%WIFI_IAP_PAGE_SIZE)
+				{
+					wifi_iap_info.total_page ++;
+				}
 
 			wifi_iap_request_page(0);
+			WifiIapStartRetryFunction(1000,5);
 		}
 
 	if(WifiOperatData.Rx_data[7]==0XF2)//transfer
@@ -407,7 +467,7 @@ void wifi_iap_write_to_flash(void)
 
 	wifi_iap_copy_to_flash();
 	
-	if(wifi_iap_info.recved_page == wifi_iap_info.total_size- 1)
+	if(wifi_iap_info.recved_page == wifi_iap_info.total_page- 1)
 		{
 			if(wifi_iap_info.page)
 				{
@@ -428,7 +488,7 @@ void wifi_iap_write_to_flash(void)
 
 void wifi_iap_copy_to_flash(void)
 {	
-	if(wifi_iap_info.recved_page < wifi_iap_info.total_size -1)
+	if(wifi_iap_info.recved_page < wifi_iap_info.total_page -1)
 		{
 			if(wifi_iap_info.cur_page_size < WIFI_IAP_PAGE_SIZE)
 				{
@@ -448,5 +508,7 @@ void wifi_iap_copy_to_flash(void)
 		}
 	
 }
+
+
 
 

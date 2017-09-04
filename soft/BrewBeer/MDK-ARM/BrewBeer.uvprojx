@@ -576,6 +576,11 @@
               <FileType>1</FileType>
               <FilePath>..\Src\flash.c</FilePath>
             </File>
+            <File>
+              <FileName>iap.c</FileName>
+              <FileType>1</FileType>
+              <FilePath>..\Src\iap.c</FilePath>
+            </File>
           </Files>
         </Group>
         <Group>

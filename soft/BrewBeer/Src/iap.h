@@ -89,11 +89,19 @@ typedef struct
 typedef struct 
 {
 	unsigned char page:4;
+
+	unsigned char start_retry;
+	unsigned char timer_set_flag;
+	unsigned char need_retry;
+	unsigned char retry_times;
+	unsigned char retry_timer;
+	
 	unsigned short block;
 	unsigned short cur_page_size;
 	unsigned short type;
 	unsigned short target_version;
 	unsigned int total_size;
+	unsigned int total_page;
 	unsigned int recved_page_sum;
 	unsigned int recved_page;
 	unsigned int request_page;
