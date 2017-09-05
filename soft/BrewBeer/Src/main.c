@@ -70,6 +70,7 @@ int main(void)
 
   /* USER CODE BEGIN 1 */
   
+	start_app();
   /* USER CODE END 1 */
 
   /* MCU Configuration----------------------------------------------------------*/
@@ -104,7 +105,7 @@ int main(void)
   	RELEASE_SMART_LINK;
   	RELEASE_WIFI_RESET;
 	
-	//SET_SMART_LINK;
+	//SET_SMART_LINK;	
 	InitSoftTimer();
   	COM1LedBlink(500,0);
   	COM2LedBlink(400,0);

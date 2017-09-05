@@ -28,10 +28,10 @@ void test_jump(void)
 
 void jump_to_app(unsigned int app_addr)
 {
-	HAL_Init();
-	SystemClock_Config();	
-	disable_all_irq();
-	HAL_RCC_DeInit();
+	//HAL_Init();
+	//HAL_RCC_DeInit();
+	//SystemClock_Config();	
+	//disable_all_irq();
 	if (((*(__IO uint32_t*)app_addr) & 0x2FFE0000 ) == 0x20000000)
 		{
 			/* Jump to user application */

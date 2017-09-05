@@ -17,7 +17,7 @@ flash 分配情况
 108 - 127    SAVE_DATA iap占用第108  页
 *****************************/
 
-#define DEVICE_SOFT_VER  (0X0101)
+#define DEVICE_SOFT_VER  (1001)
 
 #define FLASH_START_ADDRESS	0X8000000
 

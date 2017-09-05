@@ -125,7 +125,10 @@ void deal_key_value(unsigned key_value)
 				break;
 
 			case(KEY_1_LONG_LONG_TRIGGER):
-				
+				RUNING_LED_ON;
+				RS485_1_LED_ON;
+				RS485_2_LED_ON;
+				FAULT_LED_ON;
 				break;
 			
 			case(KEY_2_LONG_LONG_TRIGGER):
@@ -144,7 +147,7 @@ void deal_key_value(unsigned key_value)
 				break;
 
 			case(key1_long_long_press):
-
+				try_to_jump(APP_1);
 				break;
 				
 			case(key2_press): 
