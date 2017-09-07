@@ -446,6 +446,22 @@ void wifi_iap_operater(void)
 		{
 			wifi_iap_write_to_flash();
 		}
+	
+	if(WifiOperatData.Rx_data[7]==0XF8)//jump
+		{
+			if(0 == WifiOperatData.Rx_data[8])
+				{					
+					try_to_jump(APP_BASE);
+				}
+			if(1 == WifiOperatData.Rx_data[8])
+				{
+					try_to_jump(APP_1);				
+				}
+			if(2 == WifiOperatData.Rx_data[8])
+				{
+					try_to_jump(APP_2);				
+				}
+		}
 
 }
 

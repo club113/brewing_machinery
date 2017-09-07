@@ -518,7 +518,12 @@ void DealWifiData(void)
 		{
 			ExecuteData(&WifiFrame);
 		}
-	if((WifiOperatData.Rx_data[7]==0XF0)||(WifiOperatData.Rx_data[7]==0XF1)||(WifiOperatData.Rx_data[7]==0XF2))//wifi 远程升级
+	
+	if( 0 == VerifyCRC8Sub(WifiOperatData.Rx_data,(WifiOperatData.recv_data_length - 1)))
+		{
+			return;
+		}
+	if((WifiOperatData.Rx_data[7]==0XF0)||(WifiOperatData.Rx_data[7]==0XF1)||(WifiOperatData.Rx_data[7]==0XF2)||(WifiOperatData.Rx_data[7]==0XF8))//wifi 远程升级
 		{
 			wifi_iap_operater();
 		}

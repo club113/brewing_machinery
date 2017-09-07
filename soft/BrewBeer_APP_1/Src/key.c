@@ -147,7 +147,6 @@ void deal_key_value(unsigned key_value)
 				break;
 
 			case(key1_long_long_press):
-				try_to_jump(APP_2);
 
 				break;
 				

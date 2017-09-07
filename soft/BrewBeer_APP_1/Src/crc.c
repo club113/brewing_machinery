@@ -91,11 +91,11 @@ const unsigned char cCRC16LoTable[256]={0X00, 0XC0, 0XC1, 0X01, 0XC3, 0X03, 0X02
 0X43, 0X83, 0X41, 0X81, 0X80, 0X40 };
 
 //********************************************************************************************************/
-unsigned char VerifyCRC8Sub(unsigned char *vData,unsigned char vLong)
+unsigned char VerifyCRC8Sub(unsigned char *vData,unsigned short vLong)
 {
 	unsigned char  vCRC_Data;
 	unsigned char  vTempData;
-	unsigned char  vLoop;
+	unsigned short  vLoop;
 
 	vCRC_Data=0X00;
 
@@ -114,11 +114,11 @@ unsigned char VerifyCRC8Sub(unsigned char *vData,unsigned char vLong)
 }
 
 //********************************************************************************************************/
-void SetCRC8Sub(unsigned char *vData,unsigned char vLong)
+void SetCRC8Sub(unsigned char *vData,unsigned short vLong)
 {
 	unsigned char  vCRC_Data;
 	unsigned char  vTempData;
-	unsigned char  vLoop;
+	unsigned short  vLoop;
 
 	vCRC_Data=0X00;
 
