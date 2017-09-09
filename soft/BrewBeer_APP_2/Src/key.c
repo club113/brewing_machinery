@@ -97,22 +97,18 @@ unsigned char loopx = 0;
 
 void deal_key_value(unsigned key_value)
 {
-	S_PLCSendFrame test;
-	test.DeviceAddress = 1;
-	test.PurchaseVloume = 2;
-	test.EnablePurchase = 3;
-	test.Formula = 4;
-	test.StartSaccharify = 5;
-	test.StartWash = 6;
-	test.AutoShutDown = 7;
-	test.BeerValueStatus = 8;
+	//S_PLCSendFrame test;
+	//test.DeviceAddress = MachineInfo.Fermentor[0].FermentorID;
+	//test.ScreenCtrl = 1;
+	
+	
 	switch(key_value)
   		{
   			case(KEY_1_TRIGGER):
-				//LED_5_TOG;
+				
 				break;
 			case(KEY_2_TRIGGER):
-				//LED_5_TOG;
+				
 				break;
 				
 			case(KEY_1_LONG_TRIGGER):
@@ -125,10 +121,13 @@ void deal_key_value(unsigned key_value)
 				break;
 
 			case(KEY_1_LONG_LONG_TRIGGER):
+				FaultLedBlink(500,0);
 				
 				break;
 			
 			case(KEY_2_LONG_LONG_TRIGGER):
+				FaultLedBlink(500,0);
+				
 				break;
 							
   			case(key1_press):
@@ -136,7 +135,7 @@ void deal_key_value(unsigned key_value)
 				COM2LedBlink(400,0);
 				RuningLedBlink(300,0);
 				FaultLedBlink(200,0);
-				upload_device_info(NULL);
+				//upload_device_info(NULL);			
 				break;
 
 			case(key1_long_press):
@@ -144,8 +143,6 @@ void deal_key_value(unsigned key_value)
 				break;
 
 			case(key1_long_long_press):
-				try_to_jump(APP_BASE);
-
 				break;
 				
 			case(key2_press): 
@@ -154,7 +151,7 @@ void deal_key_value(unsigned key_value)
 				RuningLedBlink(400,0);
 				FaultLedBlink(500,0);
 
-				CtrlPLC(&test);
+				//CtrlPLC(&test);
 
 				break;
 
@@ -162,7 +159,11 @@ void deal_key_value(unsigned key_value)
 				SET_SMART_LINK;
 				
 				break;
-				
+
+			case(key2_long_long_press):
+				break;
+
+
 				default:
 				break;
 				

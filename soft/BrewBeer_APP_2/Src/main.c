@@ -214,7 +214,7 @@ void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
 			WifiOperatData.recv_data_length= SERIAL_RXBUFF_SIZE -WifiOperatData.DmaCNDTR;
 			HAL_UART_Receive_DMA(&WIFICOM, WifiOperatData.Rx_data, SERIAL_RXBUFF_SIZE);  
 			SerialQueueData = WIFIMSG;
-			COM2LedBlink(10,0);
+			COM1LedBlink(10,0);
 			xQueueSendFromISR(SerialQueueHandle,&SerialQueueData,&xHigherPriorityTaskWoken);
 		}
 	else

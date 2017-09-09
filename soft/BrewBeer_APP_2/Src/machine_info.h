@@ -9,6 +9,7 @@ typedef struct
 {
 	unsigned char Mac[8];
 	unsigned char IsAlive;
+	unsigned char IsSpaceUsed;
 	unsigned short FermentorID;
 	unsigned short Capacity;//容量
 	unsigned short UsedVolume;//已使用容量
@@ -26,8 +27,8 @@ typedef struct
 	unsigned char AutoUploadTimerStatus;//软件定时器状态0 未开启   1开启
 	unsigned char AutoUploadTimer;//定时上传使用的计时器
 	unsigned int UploadStepTime;//定时上传时间间隔
-	float Temperature1;//温度	
-	float Temperature2;//温度
+	unsigned short Temperature1;//温度	
+	unsigned short Temperature2;//温度
 	unsigned short FermentorNum;
 	unsigned short AliveNum;
 	S_FermentorInfo Fermentor[MAX_FERMENTOR_NUMBER];

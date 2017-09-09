@@ -28,10 +28,10 @@ void test_jump(void)
 
 void jump_to_app(unsigned int app_addr)
 {
-	HAL_Init();
-	SystemClock_Config();	
-	disable_all_irq();
-	HAL_RCC_DeInit();
+	//HAL_Init();
+	//HAL_RCC_DeInit();
+	//SystemClock_Config();	
+	//disable_all_irq();
 	if (((*(__IO uint32_t*)app_addr) & 0x2FFE0000 ) == 0x20000000)
 		{
 			/* Jump to user application */
@@ -445,6 +445,22 @@ void wifi_iap_operater(void)
 	if(WifiOperatData.Rx_data[7]==0XF2)//transfer
 		{
 			wifi_iap_write_to_flash();
+		}
+
+	if(WifiOperatData.Rx_data[7]==0XF8)//jump
+		{
+			if(0 == WifiOperatData.Rx_data[8])
+				{					
+					try_to_jump(APP_BASE);
+				}
+			if(1 == WifiOperatData.Rx_data[8])
+				{
+					try_to_jump(APP_1);				
+				}
+			if(2 == WifiOperatData.Rx_data[8])
+				{
+					try_to_jump(APP_2);				
+				}
 		}
 
 }

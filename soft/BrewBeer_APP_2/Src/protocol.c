@@ -30,6 +30,17 @@ unsigned char upload_device_info(char* parameter)
 	msg.format_control.fc.encrypt = 0;
 	msg.format_control.fc.version = 0;
 	msg.function = GETDEVICEINFO;	
+	msg.arg[0] = ((MachineInfo.Temperature1) >> 8)&0XFF;
+	msg.arg[1] = ((MachineInfo.Temperature1) >> 0)&0XFF;
+
+	
+	msg.arg[3] = ((MachineInfo.Fermentor[0].FermentorID) >> 8)&0XFF;
+	msg.arg[4] = ((MachineInfo.Fermentor[0].FermentorID) >> 0)&0XFF;
+
+	
+	msg.arg[8] = ((MachineInfo.Fermentor[0].LeftVolume) >> 8)&0XFF;
+	msg.arg[9] = ((MachineInfo.Fermentor[0].LeftVolume) >> 0)&0XFF;
+	
 	SetTimeStampIntoArrary(msg.arg+14);
 	UploadDataByWifi(&msg);
 	return 1;
@@ -117,6 +128,8 @@ unsigned char ctrl_device_value(char* parameter)
 	P_S_WifiFrame wifi_frame =NULL;
 	S_WifiFrame msg={0};//回复消息
 	wifi_frame = (P_S_WifiFrame)parameter;
+
+	S_PLCSendFrame PLCMsg = {0};
 	if(0 == CheckDeviceID(wifi_frame)&&(1 != wifi_frame->data_length))
 		{
 			return 0;//数据帧错误
@@ -132,14 +145,20 @@ unsigned char ctrl_device_value(char* parameter)
 			//打开出酒阀
 		}
 
-	if(2 == wifi_frame->arg[0])
+	if(0X11 == wifi_frame->arg[0])
 		{
-			//打开屏幕?
+			//打开屏幕
+			PLCMsg.DeviceAddress = MachineInfo.Fermentor[0].FermentorID;
+			PLCMsg.ScreenCtrl = 1;
+			CtrlPLC(&PLCMsg);
 		}
 
-	if(3 == wifi_frame->arg[0])
+	if(0X10 == wifi_frame->arg[0])
 		{
-			//打开屏幕?
+			//关闭屏幕
+			PLCMsg.DeviceAddress = MachineInfo.Fermentor[0].FermentorID;
+			PLCMsg.ScreenCtrl = 0;
+			CtrlPLC(&PLCMsg);
 		}
 
 	msg.data_length = 5;
@@ -518,7 +537,13 @@ void DealWifiData(void)
 		{
 			ExecuteData(&WifiFrame);
 		}
-	if((WifiOperatData.Rx_data[7]==0XF0)||(WifiOperatData.Rx_data[7]==0XF1)||(WifiOperatData.Rx_data[7]==0XF2))//wifi 远程升级
+
+	if( 0 == VerifyCRC8Sub(WifiOperatData.Rx_data,(WifiOperatData.recv_data_length - 1)))
+		{
+			return;
+		}
+	
+	if((WifiOperatData.Rx_data[7]==0XF0)||(WifiOperatData.Rx_data[7]==0XF1)||(WifiOperatData.Rx_data[7]==0XF2)||(WifiOperatData.Rx_data[7]==0XF8))//wifi 远程升级
 		{
 			wifi_iap_operater();
 		}
@@ -531,17 +556,30 @@ void DealWifiData(void)
 
 
 
-unsigned char PLCDecode(unsigned char* data,unsigned short recv_data_length,P_S_PLCRecvFrame plc_frame)
+unsigned char PLCDecode(unsigned char* data,unsigned short recv_data_length,void* plc_frame)
 {
-	if(7 != recv_data_length)	
+	if(CURFRAMELENGTH != recv_data_length)	
 		{
 			return 0;
 		}
-	memcpy(plc_frame,data,RS485RECVFRAMELENGTH);
+	memcpy(plc_frame,data,CURFRAMELENGTH);
 	return 1;
 }
 
-unsigned char GetFermenterID(unsigned short FermentorID)
+unsigned char GetFirstEmptyFermentorSpace(void)
+{
+	unsigned char loopx = 0;
+	for(; loopx < MAX_FERMENTOR_NUMBER; loopx++)
+		{
+			if(0 == MachineInfo.Fermentor[loopx].IsSpaceUsed)
+				{
+					return loopx;
+				}
+		}
+	return 0XFF;
+}
+
+unsigned char GetFermentorID(unsigned short FermentorID)
 {
 
 	unsigned char loopx = 0;
@@ -555,17 +593,35 @@ unsigned char GetFermenterID(unsigned short FermentorID)
 	return 0XFF;
 }
 
-void UpdataMachineInfo(unsigned char fermentor_num,P_S_PLCRecvFrame plc_frame)
+unsigned char AddFermentorID(unsigned short FermentorID)
+{
+	unsigned char AddPoint = 0;
+	if(0XFF == GetFermentorID(FermentorID))
+		{
+			AddPoint = GetFirstEmptyFermentorSpace();
+			if(0XFF == AddPoint)
+				{
+					return 0XFF;
+				}			
+			MachineInfo.Fermentor[AddPoint].FermentorID = FermentorID;
+			MachineInfo.Fermentor[AddPoint].IsSpaceUsed = 1;
+			MachineInfo.FermentorNum ++;
+		}
+	return 0;
+}
+
+void UpdataMachineInfo(unsigned char fermentor_num,void* plc_frame)
 {
 	if(fermentor_num > MachineInfo.FermentorNum)
 		{
 			return;//不合法发酵罐保存地址
 		}
-	MachineInfo.RuningStage = plc_frame->DeviceStatus;
-	MachineInfo.Fermentor[fermentor_num].LeftVolume = plc_frame->LeftVloume;
-	MachineInfo.Fermentor[fermentor_num].UsedVolume = plc_frame->UsedVloume;
-	MachineInfo.Fermentor[fermentor_num].PressValue = plc_frame->PressValue;
-	MachineInfo.Fermentor[fermentor_num].Temperature = plc_frame->Temperture;
+	//MachineInfo.RuningStage = (P_CURPLCFRAME)plc_frame->DeviceStatus;
+	MachineInfo.Fermentor[fermentor_num].LeftVolume = (((POINTCURPLCFRAME)plc_frame)->LeftVloume)*10;
+	MachineInfo.Temperature1 = (((POINTCURPLCFRAME)plc_frame)->Temperture)*10;
+	//MachineInfo.Fermentor[fermentor_num].UsedVolume = (P_CURPLCFRAME)plc_frame->UsedVloume;
+	//MachineInfo.Fermentor[fermentor_num].PressValue = (P_CURPLCFRAME)plc_frame->PressValue;
+	//MachineInfo.Fermentor[fermentor_num].Temperature = (P_CURPLCFRAME)plc_frame->Temperture;
 }
 
 
@@ -578,11 +634,12 @@ HAL_StatusTypeDef CtrlPLC(P_S_PLCSendFrame sendframe)
 
 void DealPLCData(void)
 {
-	S_PLCRecvFrame plc_frame = {0};
-	unsigned short default_fermentorID = 0;
-	if(1 == PLCDecode(Rs485_1OperatData.Rx_data,Rs485_1OperatData.recv_data_length,&plc_frame))
+	CURPLCFRAME plc_frame = {0};
+	//unsigned short default_fermentorID = 0;
+	if(1 == PLCDecode(Rs485_1OperatData.Rx_data,Rs485_1OperatData.recv_data_length,(void*)&plc_frame))
 		{
-			UpdataMachineInfo(GetFermenterID(default_fermentorID),&plc_frame);
+			AddFermentorID(Rs485_1OperatData.Rx_data[0]);
+			UpdataMachineInfo(GetFermentorID(Rs485_1OperatData.Rx_data[0]),(void*)&plc_frame);
 		}	
 }
 
