@@ -1,5 +1,5 @@
 #include "machine_info.h"
-S_MachineInfo MachineInfo = {.UploadStepTime = 10000,};
+S_MachineInfo MachineInfo = {.UploadStepTime = 30000,};
 
 void GetDeviceID(unsigned char* buf)//可能会使程序崩溃务必确认buf大于8个字节
 {

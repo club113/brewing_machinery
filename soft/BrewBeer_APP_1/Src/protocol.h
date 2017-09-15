@@ -51,7 +51,7 @@ typedef struct
 
 //PLC发送数据的长度
 #define RS485RECVFRAMELENGTH	7
-#define RS485RECVFRAMELENGTH_2	3
+#define RS485RECVFRAMELENGTH_2	(sizeof(S_PLC_2_RecvFrame))
 
 #define CURPLCFRAME S_PLC_2_RecvFrame
 #define POINTCURPLCFRAME P_S_PLC_2_RecvFrame
@@ -77,6 +77,7 @@ typedef struct
 	unsigned char LeftVloume;//当前液位 剩余容量
 	//unsigned char PressValue;//发酵罐压力
 	unsigned char Temperture;//发酵罐温度
+	unsigned char ValueStatus;
 }S_PLC_2_RecvFrame,*P_S_PLC_2_RecvFrame;
 
 
@@ -95,6 +96,7 @@ typedef struct
 	//unsigned char LcdStatus;//显示屏状态
 	//unsigned char RandomToken;//随机数令牌
 	unsigned char ScreenCtrl;
+	unsigned char ValueStatus;
 }S_PLCSendFrame,*P_S_PLCSendFrame;
 
 unsigned char upload_device_info(char* parameter);
