@@ -24,6 +24,7 @@ typedef struct
 	unsigned char DeviceID[8];
 	unsigned char DeviceAddress;
 	unsigned char ValueStatus;//出酒阀状态
+	unsigned char ScreenStatus;
 	unsigned char RuningStage;//工作阶段
 	unsigned char AutoUploadTimerStatus;//软件定时器状态0 未开启   1开启
 	unsigned char AutoUploadTimer;//定时上传使用的计时器
@@ -36,6 +37,7 @@ typedef struct
 }S_MachineInfo,*P_S_MachineInfo;
 extern S_MachineInfo MachineInfo;
 
+void AutoUpload(void* arg);
 void GetDeviceID(unsigned char* buf);
 void SetAutoUpload(unsigned int msec);
 

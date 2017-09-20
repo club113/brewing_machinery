@@ -33,9 +33,21 @@ unsigned char upload_device_info(char* parameter)
 	msg.arg[0] = ((MachineInfo.Temperature1) >> 8)&0XFF;
 	msg.arg[1] = ((MachineInfo.Temperature1) >> 0)&0XFF;
 
+	if(MachineInfo.ScreenStatus)
+		{
+			msg.arg[2] = 3;
+		}
+	else
+		{
+			msg.arg[2] = 4;
+		}
+
 	
-	msg.arg[3] = ((MachineInfo.Fermentor[0].FermentorID) >> 8)&0XFF;
-	msg.arg[4] = ((MachineInfo.Fermentor[0].FermentorID) >> 0)&0XFF;
+	//msg.arg[3] = ((MachineInfo.Fermentor[0].FermentorID) >> 8)&0XFF;
+	//msg.arg[4] = ((MachineInfo.Fermentor[0].FermentorID) >> 0)&0XFF;
+
+	msg.arg[3] = 0;
+	msg.arg[4] = 0;
 
 	msg.arg[7] = ((MachineInfo.ValueStatus) >> 0)&0XFF;
 		
@@ -142,6 +154,7 @@ unsigned char ctrl_device_value(char* parameter)
 			//¹Ø±Õ³ö¾Æ·§
 			PLCMsg.DeviceAddress = MachineInfo.Fermentor[0].FermentorID;
 			PLCMsg.ValueStatus= 0;
+			PLCMsg.ScreenCtrl = MachineInfo.ScreenStatus;
 			CtrlPLC(&PLCMsg);
 		}
 
@@ -150,6 +163,7 @@ unsigned char ctrl_device_value(char* parameter)
 			//´ò¿ª³ö¾Æ·§
 			PLCMsg.DeviceAddress = MachineInfo.Fermentor[0].FermentorID;
 			PLCMsg.ValueStatus= 1;
+			PLCMsg.ScreenCtrl = MachineInfo.ScreenStatus;
 			CtrlPLC(&PLCMsg);
 		}
 
@@ -165,9 +179,12 @@ unsigned char ctrl_device_value(char* parameter)
 	msg.format_control.fc.encrypt = 0;
 	msg.format_control.fc.version= 0;
 	msg.function = CTRLVALUE;	
-	msg.arg[0] = 1;//·¢½Í¹Ş³ö¾Æ·§×´Ì¬
+	msg.arg[0] = MachineInfo.ValueStatus;//·¢½Í¹Ş³ö¾Æ·§×´Ì¬
 	SetTimeStampIntoArrary(msg.arg+1);
 	UploadDataByWifi(&msg);
+
+	register_callback_function_into_timer(register_value_into_timer(1000, 0),AutoUpload);//·µ»Ø³ö¾Í·§×´Ì¬
+	
 	return 1;
 }
 
@@ -228,6 +245,7 @@ unsigned char ctrl_machine(char* parameter)
 				//´ò¿ªÆÁÄ»
 				PLCMsg.DeviceAddress = MachineInfo.Fermentor[0].FermentorID;
 				PLCMsg.ScreenCtrl = 1;
+				PLCMsg.ValueStatus =MachineInfo.ValueStatus;
 				CtrlPLC(&PLCMsg);
 				break;
 
@@ -235,6 +253,7 @@ unsigned char ctrl_machine(char* parameter)
 			//¹Ø±ÕÆÁÄ»
 				PLCMsg.DeviceAddress = MachineInfo.Fermentor[0].FermentorID;
 				PLCMsg.ScreenCtrl = 0;
+				PLCMsg.ValueStatus =MachineInfo.ValueStatus;
 				CtrlPLC(&PLCMsg);
 				break;
 
@@ -648,6 +667,7 @@ void UpdataMachineInfo(unsigned char fermentor_num,void* plc_frame)
 	MachineInfo.Fermentor[fermentor_num].LeftVolume = (((POINTCURPLCFRAME)plc_frame)->LeftVloume)*10;
 	MachineInfo.Temperature1 = (((POINTCURPLCFRAME)plc_frame)->Temperture)*10;
 	MachineInfo.ValueStatus = (((POINTCURPLCFRAME)plc_frame)->ValueStatus);
+	MachineInfo.ScreenStatus =(((POINTCURPLCFRAME)plc_frame)->ScreenStatus);
 	//MachineInfo.Fermentor[fermentor_num].UsedVolume = (P_CURPLCFRAME)plc_frame->UsedVloume;
 	//MachineInfo.Fermentor[fermentor_num].PressValue = (P_CURPLCFRAME)plc_frame->PressValue;
 	//MachineInfo.Fermentor[fermentor_num].Temperature = (P_CURPLCFRAME)plc_frame->Temperture;

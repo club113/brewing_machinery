@@ -230,7 +230,8 @@ void WatcherTask(void const * argument)
   /* Infinite loop */
   for(;;)
   {
-	osDelay(2000);	
+	osDelay(200);	
+	HAL_IWDG_Refresh(&hiwdg);
 
 	//UploadDataByRs485_1(&msg);
 	//UploadDataByRs485_2(&msg);

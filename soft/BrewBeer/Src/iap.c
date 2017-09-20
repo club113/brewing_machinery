@@ -272,9 +272,34 @@ void init_save_data(void)
 	
 }
 
+void my_gpio_init(void)
+{
+  GPIO_InitTypeDef GPIO_InitStruct;
+
+  /* GPIO Ports Clock Enable */
+  __HAL_RCC_GPIOC_CLK_ENABLE();
+  __HAL_RCC_GPIOD_CLK_ENABLE();
+  __HAL_RCC_GPIOA_CLK_ENABLE();
+  __HAL_RCC_GPIOB_CLK_ENABLE();
+
+  /*Configure GPIO pins : PBPin PBPin */
+  GPIO_InitStruct.Pin = KEY_2_Pin|KEY_1_Pin;
+  GPIO_InitStruct.Mode = GPIO_MODE_INPUT;
+  GPIO_InitStruct.Pull = GPIO_NOPULL;
+  HAL_GPIO_Init(GPIOB, &GPIO_InitStruct);
+
+}
+
+#define JUMP_TO_BASE	(0 == Read_KEY_1)
+
 void start_app(void)
 {
 	init_save_data();
+	if(JUMP_TO_BASE)//key1  按下
+		{
+			while(JUMP_TO_BASE);//等待按键松开
+			try_to_jump(APP_BASE);
+		}
 	choose_app();
 }
 

@@ -111,6 +111,7 @@ int main(void)
   	RuningLedBlink(300,0);
   	FaultLedBlink(100,0);
 	SetAutoUpload(MachineInfo.UploadStepTime);//设置定时上传
+	HAL_IWDG_Start(&hiwdg);
   /* USER CODE END 2 */
 
   /* Call init function for freertos objects (in freertos.c) */

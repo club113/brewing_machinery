@@ -153,7 +153,10 @@ void SystemTask(void const * argument)
 	Rs485_1ComStartRecv();
 	Rs485_2ComStartRecv();
 	GetDeviceID(MachineInfo.DeviceID);
-	COM1LedBlink(500,1);
+	RuningLedBlink(800,1);
+	
+	//COM2LedBlink(800,1);
+	//COM1LedBlink(500,1);
   /* Infinite loop */
   for(;;)
   {
@@ -230,7 +233,8 @@ void WatcherTask(void const * argument)
   /* Infinite loop */
   for(;;)
   {
-	osDelay(2000);	
+	osDelay(200);
+	HAL_IWDG_Refresh(&hiwdg);
 
 	//UploadDataByRs485_1(&msg);
 	//UploadDataByRs485_2(&msg);

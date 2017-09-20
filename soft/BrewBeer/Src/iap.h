@@ -136,6 +136,7 @@ extern S_Wifi_Iap_Info wifi_iap_info;
 #define WIFI_IAP_OPERAT_END				0X05
 #define WIFI_IAP_OPERAT_TRANSMISSION 	0X07
 
+void my_gpio_init(void);
 void test_jump(void);
 void disable_all_irq(void);
 void SystemClock_Config(void);

@@ -68,8 +68,8 @@ void MX_FREERTOS_Init(void);
 int main(void)
 {
 
-  /* USER CODE BEGIN 1 */
-  
+  /* USER CODE BEGIN 1 */  
+	my_gpio_init();
 	start_app();
   /* USER CODE END 1 */
 
@@ -112,6 +112,7 @@ int main(void)
   	RuningLedBlink(300,0);
   	FaultLedBlink(100,0);
 	SetAutoUpload(MachineInfo.UploadStepTime);//设置定时上传
+	HAL_IWDG_Start(&hiwdg);
   /* USER CODE END 2 */
 
   /* Call init function for freertos objects (in freertos.c) */

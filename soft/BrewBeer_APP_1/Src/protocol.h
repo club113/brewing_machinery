@@ -78,6 +78,7 @@ typedef struct
 	//unsigned char PressValue;//发酵罐压力
 	unsigned char Temperture;//发酵罐温度
 	unsigned char ValueStatus;
+	unsigned char ScreenStatus;
 }S_PLC_2_RecvFrame,*P_S_PLC_2_RecvFrame;
 
 
